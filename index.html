@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人作品集</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">Portfolio</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home" class="nav-link">首页</a></li>
+        <li><a href="#about" class="nav-link">关于我</a></li>
+        <li><a href="#portfolio" class="nav-link">作品集</a></li>
+        <li><a href="#contact" class="nav-link">联系我</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 个人简介区 -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-avatar">
+        <div class="avatar-placeholder">👤</div>
+      </div>
+      <h1 class="hero-name">张三</h1>
+      <p class="hero-tagline">全栈开发者 · AI 探索者 · 终身学习者</p>
+      <a href="#" class="btn btn-primary" id="downloadResume">下载简历</a>
+    </div>
+  </section>
+
+  <!-- 关于我 / 技能展示区 -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">关于我</h2>
+      <p class="section-desc">热爱技术，专注于用代码解决实际问题。拥有丰富的全栈开发经验，同时对人工智能领域保持高度关注与探索。</p>
+      <div class="skills">
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">Python</span>
+            <span class="skill-percent">90%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">Java</span>
+            <span class="skill-percent">85%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">AI / 机器学习</span>
+            <span class="skill-percent">80%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">JavaScript</span>
+            <span class="skill-percent">75%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">数据库 / SQL</span>
+            <span class="skill-percent">70%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 作品集区 -->
+  <section class="section section-alt" id="portfolio">
+    <div class="container">
+      <h2 class="section-title">作品集</h2>
+      <p class="section-desc">以下是我参与的部分项目，涵盖全栈开发与 AI 应用。</p>
+      <div class="portfolio-grid">
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">🤖</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">AI 智能助手</h3>
+            <p class="card-desc">基于大语言模型的智能对话系统，支持多轮对话和上下文理解。</p>
+            <div class="card-tags">
+              <span>Python</span><span>NLP</span><span>FastAPI</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">📊</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">数据可视化平台</h3>
+            <p class="card-desc">实时数据监控与可视化分析平台，支持多数据源接入。</p>
+            <div class="card-tags">
+              <span>Vue.js</span><span>ECharts</span><span>Node.js</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">🛒</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">电商后台系统</h3>
+            <p class="card-desc">完整的电商后台管理，包含订单、库存、用户管理等模块。</p>
+            <div class="card-tags">
+              <span>Java</span><span>Spring Boot</span><span>MySQL</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">🔬</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">图像识别工具</h3>
+            <p class="card-desc">基于深度学习的图像分类与目标检测工具，准确率 95%+。</p>
+            <div class="card-tags">
+              <span>PyTorch</span><span>OpenCV</span><span>Docker</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">📱</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">移动端社交 App</h3>
+            <p class="card-desc">跨平台社交应用，支持即时通讯、动态分享和社群功能。</p>
+            <div class="card-tags">
+              <span>React Native</span><span>Firebase</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="card-img">
+            <div class="card-img-placeholder">⚡</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">自动化运维平台</h3>
+            <p class="card-desc">CI/CD 流水线管理与服务器监控告警的一站式平台。</p>
+            <div class="card-tags">
+              <span>Go</span><span>Kubernetes</span><span>Prometheus</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系表单 -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">联系我</h2>
+      <p class="section-desc">有合作想法或者任何问题？欢迎留言，我会尽快回复。</p>
+      <form class="contact-form" id="contactForm">
+        <div class="form-group">
+          <label for="name">姓名</label>
+          <input type="text" id="name" name="name" placeholder="请输入您的姓名" required>
+        </div>
+        <div class="form-group">
+          <label for="email">邮箱</label>
+          <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+        </div>
+        <div class="form-group">
+          <label for="message">内容</label>
+          <textarea id="message" name="message" rows="5" placeholder="请输入您想说的话" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">发送消息</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>&copy; 2026 张三. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
