@@ -1,10 +1,13 @@
 node_modules/
 logs/
 .vscode/
+skills/
 skills-self/
 package.json
 package-lock.json
 server.js
+script.js
+style.css
 README.md
 SOUL.md
 USER.md
