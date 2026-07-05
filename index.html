@@ -1,163 +1,942 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>个人作品集</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人简历 - 数字化探索者</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.75);
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --accent-primary: #a78bfa;
+      --accent-secondary: #7c3aed;
+      --accent-glow: rgba(167, 139, 250, 0.3);
+      --accent-purple: #8b5cf6;
+      --accent-deep: #5b21b6;
+      --border-glow: rgba(167, 139, 250, 0.12);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== ANIMATED BACKGROUND ===== */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 16px 0;
+      backdrop-filter: blur(12px);
+      background: rgba(45, 27, 105, 0.5);
+      border-bottom: 1px solid rgba(167, 139, 250, 0.12);
+      transition: all 0.3s;
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #c4b5fd;
+      letter-spacing: 1px;
+    }
+    .nav-logo span { color: rgba(255, 255, 255, 0.4); }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-purple);
+      transition: width 0.3s;
+      box-shadow: 0 0 8px #c4b5fd;
+    }
+    .nav-links a:hover { color: #c4b5fd; }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ===== HERO — 紫色居中布局 ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      background: linear-gradient(160deg, #1a0a3e 0%, #2d1b69 25%, #5b2d8e 50%, #7c3aed 75%, #6d28d9 100%);
+      overflow: hidden;
+    }
+
+    /* 科技扫描线 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(167, 139, 250, 0.03) 2px,
+        rgba(167, 139, 250, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 数字网格背景 */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(167, 139, 250, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 139, 250, 0.06) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 光晕动画 */
+    .hero-glow {
+      position: absolute;
+      top: -30%;
+      left: -20%;
+      width: 140%;
+      height: 160%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(167, 139, 250, 0.12) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+      animation: heroGlow 10s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes heroGlow {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      100% { transform: translate(3%, 2%) rotate(2deg) scale(1.05); }
+    }
+
+    /* 浮动科技粒子（纯 CSS） */
+    .hero-dots {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-dots i {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: rgba(167, 139, 250, 0.4);
+      border-radius: 50%;
+      animation: floatDot var(--d, 8s) ease-in-out infinite alternate;
+    }
+    .hero-dots i:nth-child(1) { top: 15%; left: 10%; --d: 7s; }
+    .hero-dots i:nth-child(2) { top: 70%; left: 85%; --d: 9s; }
+    .hero-dots i:nth-child(3) { top: 30%; left: 75%; --d: 6s; }
+    .hero-dots i:nth-child(4) { top: 80%; left: 20%; --d: 8s; }
+    .hero-dots i:nth-child(5) { top: 50%; left: 50%; --d: 10s; }
+    .hero-dots i:nth-child(6) { top: 20%; left: 90%; --d: 7.5s; }
+    .hero-dots i:nth-child(7) { top: 60%; left: 5%; --d: 8.5s; }
+
+    @keyframes floatDot {
+      0% { transform: translateY(0) scale(1); opacity: 0.3; }
+      100% { transform: translateY(-30px) scale(1.5); opacity: 0.8; }
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* 头像 — 外层科技光环 */
+    .hero-avatar-wrap {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .hero-avatar-wrap::before {
+      content: '';
+      position: absolute;
+      top: -8px; left: -8px;
+      right: -8px; bottom: -8px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(167, 139, 250, 0.25);
+      animation: ringPulse 3s ease-in-out infinite;
+    }
+    .hero-avatar-wrap::after {
+      content: '';
+      position: absolute;
+      top: -16px; left: -16px;
+      right: -16px; bottom: -16px;
+      border-radius: 50%;
+      border: 1px dashed rgba(167, 139, 250, 0.12);
+      animation: ringRotate 12s linear infinite;
+    }
+
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    @keyframes ringRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hero-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2.5px solid rgba(167, 139, 250, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      transition: all 0.4s;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-avatar:hover {
+      border-color: rgba(167, 139, 250, 0.7);
+      box-shadow: 0 0 50px rgba(167, 139, 250, 0.25);
+      transform: scale(1.05);
+    }
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* 姓名 — 微光文字 */
+    .hero-name {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 16px;
+      letter-spacing: 3px;
+      line-height: 1.2;
+      text-shadow: 0 0 30px rgba(167, 139, 250, 0.3);
+    }
+
+    /* 职业标签 */
+    .hero-tags {
+      font-size: clamp(15px, 2vw, 20px);
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    /* 按钮 — 科技感 */
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: rgba(0, 0, 0, 0.35);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-family: var(--font-sans);
+      backdrop-filter: blur(4px);
+    }
+    .hero-btn:hover {
+      background: rgba(0, 0, 0, 0.55);
+      transform: scale(1.05);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .hero-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section { padding: 100px 0; }
+
+    .section-header {
+      margin-bottom: 56px;
+    }
+    .section-number {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-primary);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+    }
+    .section-title .highlight {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .about-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .about-tags .tag {
+      padding: 8px 18px;
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-primary);
+      background: rgba(0, 240, 255, 0.05);
+      transition: all 0.3s;
+    }
+    .about-tags .tag:hover {
+      background: rgba(0, 240, 255, 0.12);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .about-code {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.8;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-code::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple));
+    }
+    .about-code .code-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .about-code .code-bar span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .about-code .code-bar .r { background: #ff5f56; }
+    .about-code .code-bar .y { background: #ffbd2e; }
+    .about-code .code-bar .g { background: #27c93f; }
+
+    .about-code .line { display: block; white-space: pre-wrap; }
+    .about-code .keyword { color: var(--accent-purple); }
+    .about-code .string { color: var(--accent-green); }
+    .about-code .comment { color: #6b7280; }
+    .about-code .fn { color: var(--accent-primary); }
+    .about-code .var { color: var(--accent-pink); }
+
+    /* 能力画像模块 */
+    .profile-module {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pm-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .pm-label {
+      font-size: 11px;
+      color: var(--accent-primary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      min-width: 44px;
+      font-weight: 500;
+    }
+    .pm-value {
+      font-size: 13px;
+      color: #e2e8f0;
+    }
+    .pm-divider {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(167, 139, 250, 0.2), transparent);
+      margin: 8px 0 4px;
+    }
+    .pm-section-title {
+      font-size: 10px;
+      color: rgba(167, 139, 250, 0.5);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .pm-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .pm-tags span {
+      padding: 3px 10px;
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--accent-primary);
+      background: rgba(167, 139, 250, 0.06);
+      transition: all 0.2s;
+    }
+    .pm-tags span:hover {
+      background: rgba(167, 139, 250, 0.15);
+      border-color: rgba(167, 139, 250, 0.4);
+    }
+    .pm-motto {
+      font-size: 13px;
+      color: #e2e8f0;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== TRAVEL ===== */
+    .travel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* 足迹分割线 */
+    .section-divider {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 16px 0 8px;
+    }
+    .section-divider .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), transparent);
+    }
+    .section-divider .divider-text {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-primary);
+      letter-spacing: 3px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .travel-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 240, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .travel-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .travel-card:hover::before { opacity: 1; }
+    .travel-card:hover {
+      border-color: rgba(0, 240, 255, 0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 240, 255, 0.08);
+    }
+
+    .travel-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .travel-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .travel-card .location {
+      font-size: 12px;
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      margin-bottom: 12px;
+    }
+    .travel-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ===== SKILLS ===== */
+    .skills-section .section-header { margin-bottom: 48px; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .skill-group h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .skill-item {
+      margin-bottom: 20px;
+    }
+    .skill-item:last-child { margin-bottom: 0; }
+
+    .skill-item .skill-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .skill-item .skill-name { color: var(--text-primary); font-weight: 500; }
+    .skill-item .skill-pct { color: var(--accent-primary); font-family: var(--font-mono); font-size: 12px; }
+
+    .skill-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .skill-bar .fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-primary), var(--accent-purple), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 48px;
+      padding-left: 32px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-primary);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+    }
+
+    .timeline-item .date {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-primary);
+      margin-bottom: 4px;
+    }
+    .timeline-item h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .timeline-item .org {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .timeline-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-content {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-content p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .contact-link:hover {
+      background: rgba(0, 240, 255, 0.1);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.1);
+    }
+
+    /* 公众号二维码 */
+    .contact-qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .contact-qr-label {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 4px;
+      text-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+    }
+    .contact-qr-img {
+      width: 280px;
+      height: 280px;
+      border-radius: 12px;
+      border: 2px solid rgba(167, 139, 250, 0.2);
+      transition: all 0.3s;
+      object-fit: cover;
+    }
+    .contact-qr-img:hover {
+      border-color: rgba(167, 139, 250, 0.5);
+      box-shadow: 0 0 30px rgba(167, 139, 250, 0.15);
+      transform: scale(1.05);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 48px 0 40px;
+      border-top: 1px solid rgba(167, 139, 250, 0.08);
+      text-align: center;
+    }
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-tagline {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
+      margin-bottom: 4px;
+    }
+    .footer-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+    .footer-dot {
+      color: rgba(167, 139, 250, 0.3);
+    }
+    .footer-name {
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px rgba(167, 139, 250, 0.3);
+    }
+    .footer-year {
+      color: var(--text-secondary);
+    }
+    .footer-sub {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: var(--font-mono);
+      letter-spacing: 2px;
+    }
+
+    /* ===== SCROLL FADE ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .hero-avatar { width: 100px; height: 100px; }
+      .hero-avatar-wrap { margin-bottom: 24px; }
+      .hero-avatar-wrap::before { top: -6px; left: -6px; right: -6px; bottom: -6px; }
+      .hero-avatar-wrap::after { top: -12px; left: -12px; right: -12px; bottom: -12px; }
+      .hero-btn { padding: 14px 32px; font-size: 14px; width: 100%; max-width: 280px; justify-content: center; }
+      .travel-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      section { padding: 60px 0; }
+    }
+  </style>
 </head>
 <body>
-  <!-- 导航栏 -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="#home" class="nav-logo">Portfolio</a>
-      <ul class="nav-menu" id="navMenu">
-        <li><a href="#home" class="nav-link">首页</a></li>
-        <li><a href="#about" class="nav-link">关于我</a></li>
-        <li><a href="#portfolio" class="nav-link">作品集</a></li>
-        <li><a href="#contact" class="nav-link">联系我</a></li>
+
+  <!-- ===== PARTICLES CANVAS ===== -->
+  <canvas id="particles-canvas"></canvas>
+  <div class="grid-overlay"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <div class="container">
+      <div class="nav-logo">&lt;数字<span>探索者</span> /&gt;</div>
+      <ul class="nav-links">
+        <li><a href="#about">/关于我</a></li>
+        <li><a href="#skills">/技能</a></li>
+        <li><a href="#travel">/足迹</a></li>
+        <li><a href="#experience">/经历</a></li>
+        <li><a href="#contact">/联系</a></li>
       </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="菜单">
-        <span></span><span></span><span></span>
-      </button>
-      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-        <span class="theme-icon">🌙</span>
-      </button>
     </div>
   </nav>
 
-  <!-- 个人简介区 -->
-  <section class="hero" id="home">
-    <div class="hero-container">
-      <div class="hero-avatar">
-        <div class="avatar-placeholder">👤</div>
-      </div>
-      <h1 class="hero-name">张三</h1>
-      <p class="hero-tagline">全栈开发者 · AI 探索者 · 终身学习者</p>
-      <a href="#" class="btn btn-primary" id="downloadResume">下载简历</a>
+  <!-- ===== HERO — 紫色科技感 ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-dots">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
     </div>
-  </section>
-
-  <!-- 关于我 / 技能展示区 -->
-  <section class="section" id="about">
     <div class="container">
-      <h2 class="section-title">关于我</h2>
-      <p class="section-desc">热爱技术，专注于用代码解决实际问题。拥有丰富的全栈开发经验，同时对人工智能领域保持高度关注与探索。</p>
-      <div class="skills">
-        <div class="skill-item">
-          <div class="skill-header">
-            <span class="skill-name">Python</span>
-            <span class="skill-percent">90%</span>
+      <div class="hero-content">
+        <!-- 头像（科技光环） -->
+        <div class="hero-avatar-wrap">
+          <div class="hero-avatar">
+            <img src="./avatar.jpg" alt="蒙恒昌" />
           </div>
-          <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
         </div>
-        <div class="skill-item">
-          <div class="skill-header">
-            <span class="skill-name">Java</span>
-            <span class="skill-percent">85%</span>
-          </div>
-          <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header">
-            <span class="skill-name">AI / 机器学习</span>
-            <span class="skill-percent">80%</span>
-          </div>
-          <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header">
-            <span class="skill-name">JavaScript</span>
-            <span class="skill-percent">75%</span>
-          </div>
-          <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header">
-            <span class="skill-name">数据库 / SQL</span>
-            <span class="skill-percent">70%</span>
-          </div>
-          <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-        </div>
+        <!-- 姓名 -->
+        <h1 class="hero-name">蒙恒昌</h1>
+        <!-- 职业标签 -->
+        <p class="hero-tags">全栈开发者 · AI 探索者 · 终身学习者</p>
+        <!-- 下载简历按钮 -->
+        <a href="./resume.pdf" class="hero-btn" id="download-btn" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          下载简历
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- 作品集区 -->
-  <section class="section section-alt" id="portfolio">
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
     <div class="container">
-      <h2 class="section-title">作品集</h2>
-      <p class="section-desc">以下是我参与的部分项目，涵盖全栈开发与 AI 应用。</p>
-      <div class="portfolio-grid">
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">🤖</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">AI 智能助手</h3>
-            <p class="card-desc">基于大语言模型的智能对话系统，支持多轮对话和上下文理解。</p>
-            <div class="card-tags">
-              <span>Python</span><span>NLP</span><span>FastAPI</span>
-            </div>
-          </div>
-        </div>
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">📊</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">数据可视化平台</h3>
-            <p class="card-desc">实时数据监控与可视化分析平台，支持多数据源接入。</p>
-            <div class="card-tags">
-              <span>Vue.js</span><span>ECharts</span><span>Node.js</span>
-            </div>
-          </div>
-        </div>
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">🛒</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">电商后台系统</h3>
-            <p class="card-desc">完整的电商后台管理，包含订单、库存、用户管理等模块。</p>
-            <div class="card-tags">
-              <span>Java</span><span>Spring Boot</span><span>MySQL</span>
-            </div>
+      <div class="section-header reveal">
+        <div class="section-number">// 01</div>
+        <h2 class="section-title">关于我</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            我是蒙恒昌，大学攻读国际经济与贸易 + 法学双学位，现在担任 <strong style="color:var(--accent-primary);">STA</strong>（供应商质量 assurance），
+            负责供应商开发全流程管理和质量体系审核。
+          </p>
+          <p>
+            我相信真正的竞争力来自于跨界融合——将 <strong style="color:var(--accent-primary);">数据分析</strong> 能力应用于供应链优化，
+            用 <strong style="color:var(--accent-primary);">法律思维</strong> 管理商务合同，用 <strong style="color:var(--accent-primary);">质量体系</strong> 方法论解决复杂问题。
+            我是一个天生的探索者，喜欢走出舒适圈，在路上找到答案。
+          </p>
+          <p>
+            同时我也是一个 <strong style="color:var(--accent-primary);">AI 实践者</strong>，
+            擅长借助 Claude、ChatGPT 等前沿 AI 工具进行全栈商业级项目开发，
+            从需求分析、架构设计到前后端实现，用 AI 将想法快速落地为可交付的产品。
+            相信 AI 是新时代的"杠杆"，让跨界人才释放更大的创造力。
+          </p>
+          <div class="about-tags">
+            <span class="tag"># AI 全栈开发</span>
+            <span class="tag"># 供应链管理</span>
+            <span class="tag"># IATF16949</span>
+            <span class="tag"># 数据分析</span>
+            <span class="tag"># 商务谈判</span>
+            <span class="tag"># 双学位</span>
+            <span class="tag"># 探索者</span>
           </div>
         </div>
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">🔬</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">图像识别工具</h3>
-            <p class="card-desc">基于深度学习的图像分类与目标检测工具，准确率 95%+。</p>
-            <div class="card-tags">
-              <span>PyTorch</span><span>OpenCV</span><span>Docker</span>
+        <div class="reveal">
+          <div class="about-code">
+            <div class="code-bar">
+              <span class="r"></span><span class="y"></span><span class="g"></span>
             </div>
-          </div>
-        </div>
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">📱</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">移动端社交 App</h3>
-            <p class="card-desc">跨平台社交应用，支持即时通讯、动态分享和社群功能。</p>
-            <div class="card-tags">
-              <span>React Native</span><span>Firebase</span>
-            </div>
-          </div>
-        </div>
-        <div class="portfolio-card">
-          <div class="card-img">
-            <div class="card-img-placeholder">⚡</div>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">自动化运维平台</h3>
-            <p class="card-desc">CI/CD 流水线管理与服务器监控告警的一站式平台。</p>
-            <div class="card-tags">
-              <span>Go</span><span>Kubernetes</span><span>Prometheus</span>
+            <!-- 核心信息 -->
+            <div class="profile-module">
+              <div class="pm-row">
+                <span class="pm-label">姓名</span>
+                <span class="pm-value">蒙恒昌</span>
+              </div>
+              <div class="pm-row">
+                <span class="pm-label">角色</span>
+                <span class="pm-value">STA · 供应商质量保证</span>
+              </div>
+              <div class="pm-row">
+                <span class="pm-label">学历</span>
+                <span class="pm-value">国际经济与贸易 + 法学（双学位）</span>
+              </div>
+              <div class="pm-divider"></div>
+              <div class="pm-section-title">核心方法论</div>
+              <div class="pm-tags">
+                <span>APQP</span><span>PPAP</span><span>8D</span>
+                <span>PDCA</span><span>SPC</span><span>FMEA</span>
+                <span>数据分析</span><span>商务谈判</span>
+              </div>
+              <div class="pm-divider"></div>
+              <div class="pm-section-title">AI 探索</div>
+              <div class="pm-tags">
+                <span>Claude AI</span><span>ChatGPT</span>
+                <span>AI 全栈开发</span><span>Prompt Engineering</span>
+                <span>AI 自动化</span>
+              </div>
+              <div class="pm-divider"></div>
+              <div class="pm-section-title">个人信条</div>
+              <div class="pm-motto">「AI + 跨界 = 无限可能」</div>
             </div>
           </div>
         </div>
@@ -165,34 +944,346 @@
     </div>
   </section>
 
-  <!-- 联系表单 -->
-  <section class="section" id="contact">
+  <!-- ===== SKILLS ===== -->
+  <section id="skills" class="skills-section">
     <div class="container">
-      <h2 class="section-title">联系我</h2>
-      <p class="section-desc">有合作想法或者任何问题？欢迎留言，我会尽快回复。</p>
-      <form class="contact-form" id="contactForm">
-        <div class="form-group">
-          <label for="name">姓名</label>
-          <input type="text" id="name" name="name" placeholder="请输入您的姓名" required>
+      <div class="section-header reveal">
+        <div class="section-number">// 02</div>
+        <h2 class="section-title">技能栈</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group reveal">
+          <h4>质量管理体系</h4>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">IATF16949 / APQP</span><span class="skill-pct">92%</span></div><div class="skill-bar"><div class="fill" data-width="92"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">PPAP / SPC / MSA</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="fill" data-width="90"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">FMEA / CP / 8D</span><span class="skill-pct">88%</span></div><div class="skill-bar"><div class="fill" data-width="88"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">5Y / PDCA 改善</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="fill" data-width="85"></div></div></div>
         </div>
-        <div class="form-group">
-          <label for="email">邮箱</label>
-          <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+        <div class="skill-group reveal">
+          <h4>商务与供应链</h4>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">供应商开发与评审</span><span class="skill-pct">95%</span></div><div class="skill-bar"><div class="fill" data-width="95"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">商务谈判与合同管理</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="fill" data-width="90"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">成本控制与价格协议</span><span class="skill-pct">88%</span></div><div class="skill-bar"><div class="fill" data-width="88"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">项目管理</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="fill" data-width="85"></div></div></div>
         </div>
-        <div class="form-group">
-          <label for="message">内容</label>
-          <textarea id="message" name="message" rows="5" placeholder="请输入您想说的话" required></textarea>
+        <div class="skill-group reveal">
+          <h4>AI 与全栈开发</h4>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">Claude AI / ChatGPT</span><span class="skill-pct">92%</span></div><div class="skill-bar"><div class="fill" data-width="92"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">AI 全栈商业项目开发</span><span class="skill-pct">88%</span></div><div class="skill-bar"><div class="fill" data-width="88"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">Prompt Engineering</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="fill" data-width="85"></div></div></div>
+          <div class="skill-item"><div class="skill-header"><span class="skill-name">HTML / CSS / JS 开发</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="fill" data-width="82"></div></div></div>
         </div>
-        <button type="submit" class="btn btn-primary">发送消息</button>
-      </form>
+      </div>
     </div>
   </section>
 
-  <!-- 页脚 -->
-  <footer class="footer">
-    <p>&copy; 2026 张三. All rights reserved.</p>
+  <section id="travel">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-number">// 03</div>
+        <h2 class="section-title">探索向往 · Wanderlust</h2>
+      </div>
+      <div class="travel-grid">
+        <div class="section-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">已完成 · 足迹成就</span>
+          <span class="divider-line"></span>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🏃</div>
+          <h3>半马 · 突破极限</h3>
+          <div class="location">01:34:00</div>
+          <p>平均配速 4'27"/km，用数据量化每一步。从 5 公里到 21.0975 公里，每一公里都像 PDCA 循环——计划、执行、检查、改进，循环迭代。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🏅</div>
+          <h3>全马 · 耐力之战</h3>
+          <div class="location">03:50:00</div>
+          <p>42.195 公里，是对身体和意志的双重考验。就像供应商质量管理——没有捷径，只有每个环节的持续改进，才能跑完全程。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🚴</div>
+          <h3>骑行西藏 · 天路征途</h3>
+          <div class="location">3030 km · 22 天</div>
+          <p>从成都到拉萨，翻越 14 座海拔 4000m+ 的高山。每天平均 138km，用两个轮子丈量川藏线。比任何 8D 报告都更难忘的 root cause 分析——在天路上找答案。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🌴</div>
+          <h3>骑行海南 · 环岛逐风</h3>
+          <div class="location">1030 km · 8 天</div>
+          <p>从海口到三亚，顺时针环岛一周。日均 129km 的节奏，在椰林海岸线中穿行。像 APQP 的五个阶段一样——每一步都是产品的成长之旅。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🔥</div>
+          <h3>永远保持热爱</h3>
+          <div class="location">一直在路上</div>
+          <p>无论是跑步还是骑行，每一次出发都是对舒适区的宣战。数据记录的不是成绩，是热爱本身。下一站，永远是更远的远方。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🎯</div>
+          <h3>下一个目标</h3>
+          <div class="location">越野跑 · 百公里挑战</div>
+          <p>公路跑的终点是越野的起点。从马拉松到 Trail Running，从沥青路到山野小径——用脚步解锁更多未知的风景，life is about exploration.</p>
+        </div>
+
+        <!-- 分割线 -->
+        <div class="section-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">探索下一站 · 心愿清单</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <div class="travel-card reveal">
+          <div class="icon">🏔️</div>
+          <h3>西藏 · 世界屋脊</h3>
+          <div class="location">心愿目的地</div>
+          <p>向往站在海拔 5000 米的冈仁波齐脚下，在离天空最近的地方感受自然的壮阔——世界再大，也大不过一个人的好奇心。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🗺️</div>
+          <h3>中亚 · 丝路之旅</h3>
+          <div class="location">心愿目的地</div>
+          <p>想亲眼看看古代丝绸之路上的贸易枢纽如今的模样，从历史的维度理解供应链与全球化的演变。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🌋</div>
+          <h3>冰岛 · 冰与火之地</h3>
+          <div class="location">心愿目的地</div>
+          <p>在极光下感受自然的磅礴力量。就像质量管理中的"预防优于检验"——大自然的每一个极端环境都在提醒我们提前规划的重要性。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🏝️</div>
+          <h3>东南亚 · 跳岛探索</h3>
+          <div class="location">心愿目的地</div>
+          <p>在未被开发的海岛上体验最原始的生态。像数据分析一样，旅行中最珍贵的往往是那些未被记录的角落——需要自己去发现。</p>
+        </div>
+        <div class="travel-card reveal">
+          <div class="icon">🚞</div>
+          <h3>云南 · 慢行列车</h3>
+          <div class="location">心愿目的地</div>
+          <p>坐上列车穿越云贵高原，在慢节奏中感受生活的本真。有时候慢下来，才能找到真正的方向。</p>
+        </div>
+      </div>
+  <section id="experience">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-number">// 04</div>
+        <h2 class="section-title">职业轨迹</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="date">2025.05 — 至今</div>
+          <h3>STA · 供应商质量保证</h3>
+          <div class="org">江西江铃秦川电器有限公司</div>
+          <p>负责供应商开发全流程管理，组织完成 30+ 家供应商的初始评审和制造现场能力评估。主导供应商 APQP 开发过程，完成样件上线验证和 PPAP 文件审核，确保新产品开发质量达标率 98% 以上。组建联合改善小组处理质量问题，推动 8D 报告闭环，问题关闭时效缩短 40%。年度完成降本 300 万元指标。</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="date">2024.12 — 2025.02</div>
+          <h3>市场代表</h3>
+          <div class="org">华润燃气控股有限公司</div>
+          <p>协助跟进华润博雅生物智能工厂屋顶光伏项目全流程管理，完成 1000 万元项目立项。通过多轮商务谈判降低设备采购成本 20%，节约采购费用约 200 万元。精准制定光伏设备及材料采购计划，确保项目建设物资供应及时率 100%。草拟多个大型项目合同，积累丰富商务谈判经验。</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="date">2023.11 — 2023.12</div>
+          <h3>数据工程师</h3>
+          <div class="org">江西思众投资管理有限公司</div>
+          <p>分析国际经济趋势，制定投资策略，助力公司实现 15% 盈利增长。负责投资相关数据的收集、清洗和分析，包括市场数据、财务数据和行业数据。为投资团队提供高质量数据支持，提升投资决策的科学性和准确性。</p>
+        </div>
+      </div>
+
+      <div class="section-header reveal" style="margin-top:80px;">
+        <div class="section-number">// 05</div>
+        <h2 class="section-title">教育背景</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="date">2021.09 — 2025.06</div>
+          <h3>国际经济与贸易 · 本科</h3>
+          <div class="org">大学</div>
+          <p>主修国际贸易实务、国际金融、国际商法、供应链管理、质量管理体系。专业排名前 20%，获三好学生、优秀班干部荣誉称号。</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="date">2022.09 — 2025.06</div>
+          <h3>法学 · 本科（双学位）</h3>
+          <div class="org">大学</div>
+          <p>辅修合同法、公司法、经济法、商务谈判法律实务。双学位背景，具备法律思维与商务实践相结合的综合能力。</p>
+        </div>
+      </div>
+
+      <div class="about-tags" style="justify-content:center; margin-top:40px;">
+        <span class="tag">🏅 国家励志奖学金</span>
+        <span class="tag">📜 大学英语四级</span>
+        <span class="tag">💻 全国计算机二级</span>
+        <span class="tag">🤝 优秀志愿者</span>
+        <span class="tag">⭐ 校级三好学生</span>
+        <span class="tag">👔 优秀班干部</span>
+      </div>
+  <section id="contact">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center;">
+        <div class="section-number">// 06</div>
+        <h2 class="section-title">保持连接</h2>
+      </div>
+      <div class="contact-content reveal">
+        <p>
+          如果你也相信跨界思维是未来竞争力的核心，或者想聊聊供应链、质量管理、数据分析和职业成长，
+          欢迎随时联系我。我始终对新的可能性和有趣的项目敞开大门。
+        </p>
+        <div class="contact-links">
+          <div class="contact-link contact-email">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>1600642301@qq.com</span>
+          </div>
+          <a href="https://github.com/MHChenry" class="contact-link" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+        <!-- 公众号 -->
+        <div class="contact-qr">
+          <div class="contact-qr-label">公众号</div>
+          <img src="./qr-code.png" alt="公众号二维码" class="contact-qr-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-tagline">永远相信美好的事情即将发生</div>
+        <div class="footer-meta">
+          <span class="footer-dot">·</span>
+          <span class="footer-name">我是蒙同学</span>
+          <span class="footer-dot">·</span>
+        </div>
+        <div class="footer-sub">用好奇心构建 · 数字探索者</div>
+      </div>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    /* ============ PARTICLES ============ */
+    (function() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let mouse = { x: 0, y: 0 };
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+      class Particle {
+        constructor() { this.reset(); }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.speedY = (Math.random() - 0.5) * 0.4;
+          this.opacity = Math.random() * 0.6 + 0.2;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+
+          // mouse interaction
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            const force = (180 - dist) / 180;
+            this.x -= dx * force * 0.01;
+            this.y -= dy * force * 0.01;
+          }
+
+          if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+            this.reset();
+          }
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(196, 181, 253, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      const pCount = Math.min(120, Math.floor((canvas.width * canvas.height) / 10000));
+      for (let i = 0; i < pCount; i++) particles.push(new Particle());
+
+      function connectParticles() {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 150) {
+              const opacity = (1 - dist / 150) * 0.2;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(196, 181, 253, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        connectParticles();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    /* ============ SCROLL REVEAL ============ */
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    })();
+
+    /* ============ SKILL BAR ANIMATION ============ */
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fill = entry.target;
+            const w = fill.getAttribute('data-width');
+            fill.style.width = w + '%';
+          }
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.skill-bar .fill').forEach(el => observer.observe(el));
+    })();
+
+    /* ============ SMOOTH NAV SCROLL ============ */
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').slice(1);
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>
