@@ -1,0 +1,54 @@
+{
+  "frontend-design-fusion": {
+    "state": "active",
+    "pinned": false,
+    "created_by": "human",
+    "use_count": 4,
+    "view_count": 0,
+    "patch_count": 0,
+    "created_at": "2026-05-31T09:50:39.587Z",
+    "last_used_at": "2026-06-04T00:35:44.938Z",
+    "origin_meta": {
+      "write_origin": "foreground"
+    }
+  },
+  "git-essentials": {
+    "state": "active",
+    "pinned": false,
+    "created_by": "human",
+    "use_count": 4,
+    "view_count": 0,
+    "patch_count": 0,
+    "created_at": "2026-05-31T09:50:39.606Z",
+    "last_used_at": "2026-06-04T00:35:44.947Z",
+    "origin_meta": {
+      "write_origin": "foreground"
+    }
+  },
+  "vercel-deploy": {
+    "state": "active",
+    "pinned": false,
+    "created_by": "human",
+    "use_count": 4,
+    "view_count": 0,
+    "patch_count": 0,
+    "created_at": "2026-05-31T09:50:39.616Z",
+    "last_used_at": "2026-06-04T00:35:44.957Z",
+    "origin_meta": {
+      "write_origin": "foreground"
+    }
+  },
+  "winapp-cli": {
+    "state": "active",
+    "pinned": false,
+    "created_by": "human",
+    "use_count": 4,
+    "view_count": 0,
+    "patch_count": 0,
+    "created_at": "2026-05-31T09:50:39.624Z",
+    "last_used_at": "2026-06-04T00:35:44.969Z",
+    "origin_meta": {
+      "write_origin": "foreground"
+    }
+  }
+}
