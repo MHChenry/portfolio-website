@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "ritwickdey.liveserver",
-    "formulahendry.auto-rename-tag",
-    "zhuangtongfa.material-theme"
-  ]
-}

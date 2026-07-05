@@ -1,21 +1,13 @@
-# Dependencies
 node_modules/
-
-# OS
-.DS_Store
-
-# Vercel
-.vercel/
-
-# Logs
-*.log
-npm-debug.log*
-
-# Agent system files
-ONBOARDING.md
+logs/
+.vscode/
+skills-self/
+package.json
+package-lock.json
+server.js
+README.md
 SOUL.md
 USER.md
-skills/
-
-# Netlify
+ONBOARDING.md
 .netlify/
+.vercel/
